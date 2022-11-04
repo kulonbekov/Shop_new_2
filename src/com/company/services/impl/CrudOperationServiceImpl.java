@@ -52,8 +52,9 @@ public class CrudOperationServiceImpl implements CrudOperationService {
         } else if (answer == 2) {
             System.out.println("Выберите операцию.\n" +
                     "Создать продавца - 1 \n" + "Получить список продавцов - 2 \n" +
-                    "Изменить имя прдодавца- 3 \n" +
-                    "Удалить продавца - 4");
+                    "Получить продавца по ID - 3 \n" +
+                    "Изменить имя прдодавца- 4 \n" +
+                    "Удалить продавца - 5");
             int chooseOperation1 = sc.nextInt();
             switch (chooseOperation1) {
                 case 1:
@@ -80,13 +81,17 @@ public class CrudOperationServiceImpl implements CrudOperationService {
                     System.out.println("\n Список продавцов");
                     System.out.println(employeeService.empList());
                     break;
-                case 3:
+                case 4:
                     System.out.println("\n Введите имя");
                     employeeService.updateSeller(1);
                     break;
-                case 4:
+                case 5:
                     employeeService.deleteSeller(1);
                     System.out.println("Продавец 1 удален");
+                    break;
+                case 3:
+                    System.out.println("Введите ID продавца");
+                    System.out.println(employeeService.findById(sc.nextInt()));
                     break;
 
             }

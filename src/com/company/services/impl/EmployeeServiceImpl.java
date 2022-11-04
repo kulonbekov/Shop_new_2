@@ -34,9 +34,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<Employee> empList() {
 
         try {
-            PreparedStatement ps=dbHelper.getConnection("select e.id,e.name,e.age, e.number, s.id as shop_id, s.name as shop_name " +
-                    "from tb_employees e " +
-                    "INNER join tb_shop s " +
+            PreparedStatement ps=dbHelper.getConnection("select e.id,e.name,e.age, s.id as shop_id,s.name as shop_name, e.active \n" +
+                    "from tb_employees e  \n" +
+                    "INNER join tb_shop s  \n" +
                     "on s.id=e.shop_id ;");
             ResultSet rs= ps.executeQuery();
             List<Employee>list=new ArrayList<>();
@@ -45,13 +45,12 @@ public class EmployeeServiceImpl implements EmployeeService {
                 emp.setId(rs.getInt("id"));
                 emp.setName(rs.getString("name"));
                 emp.setAge(rs.getInt("age"));
+                emp.setActive(rs.getBoolean("active"));
                 Shop shop=new Shop();
                 shop.setId(rs.getInt("shop_id"));
                 shop.setName(rs.getString("shop_name"));
 
                 emp.setShopId(shop);
-
-                emp.setNumber(rs.getInt("number"));
                 list.add(emp);
             }
             return list;
@@ -84,5 +83,33 @@ public class EmployeeServiceImpl implements EmployeeService {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Employee findById(int id) {
+        try {
+            PreparedStatement ps=dbHelper.getConnection("Select * From tb_employees where id = ?");
+            ps.setInt(1,id);
+            ResultSet rs= ps.executeQuery();
+            Employee employee = new Employee();
+            //List<Employee> list=new ArrayList<>();
+            while(rs.next()){
+                employee.setId(rs.getInt("id"));
+                employee.setName(rs.getString("name"));
+                employee.setAge(rs.getInt("age"));
+                employee.setActive(rs.getBoolean("active"));
+                Shop shop = new Shop();
+                shop.setId(rs.getInt("shop_id"));
+                //shop.setName(rs.getString("shop_name"));
+                shop.setActive(rs.getBoolean("active"));
+                employee.setShopId(shop);
+
+                //list.add(employee);
+            }
+            return employee;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

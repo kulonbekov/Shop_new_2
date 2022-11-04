@@ -1,5 +1,7 @@
 package com.company.models;
 
+import java.util.Date;
+
 public class Check {
     private Long id;
     private Employee employee;
@@ -7,12 +9,15 @@ public class Check {
     private Long num;
     private int fd;
 
-    public Check(Long id, Employee employee, double totalSum, Long num, int fd) {
+    private String add_date;
+
+    public Check(Long id, Employee employee, double totalSum, Long num, int fd, String add_date) {
         this.id = id;
         this.employee = employee;
         this.totalSum = totalSum;
         this.num = num;
         this.fd = fd;
+        this.add_date = add_date;
     }
 
     public Check() {
@@ -56,5 +61,25 @@ public class Check {
 
     public void setFd(int fd) {
         this.fd = fd;
+    }
+
+    public String getAdd_date() {
+        return add_date;
+    }
+
+    public void setAdd_date(String add_date) {
+        this.add_date = add_date;
+    }
+
+    @Override
+    public String toString() {
+        return "Check{" +
+                "id=" + id +
+                ", employee=" + employee +
+                ", totalSum=" + totalSum +
+                ", num=" + num +
+                ", fd=" + fd +
+                ", add_date='" + add_date + '\'' +
+                '}';
     }
 }

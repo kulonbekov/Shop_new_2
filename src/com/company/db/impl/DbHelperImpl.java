@@ -11,7 +11,7 @@ public class DbHelperImpl implements DbHelper {
     @Override
     public PreparedStatement getConnection(String sql) {
         try {
-            Connection connection= DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Comp\\IdeaProjects\\проекты\\IdeaProjects\\SQL\\shopDBS.db");
+            Connection connection= DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","postgres");
             return connection.prepareStatement(sql);
 
         } catch (SQLException e) {

@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface CheckService {
 
-    void save(Check check);
+    String save(Check check);
     List<Check> findList();
-    Check findById(Long id);
+    Check findById(String check);
+    void updateSeller (long id, double total);
 }

@@ -4,7 +4,6 @@ public class Employee {
     private int id;
     private String name;
     private int age;
-    private int number;
     private Shop shopId;
     private boolean active;
 
@@ -15,11 +14,10 @@ public class Employee {
         this.name = name;
     }
 
-    public Employee(int id, String name, int age, int number, Shop shopId, boolean active) {
+    public Employee(int id, String name, int age,  Shop shopId, boolean active) {
         this.id = id;
         this.name = name;
         this.age = age;
-        this.number = number;
         this.shopId = shopId;
         this.active = true;
     }
@@ -48,14 +46,6 @@ public class Employee {
         this.age = age;
     }
 
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
     public Shop getShopId() {
         return shopId;
     }
@@ -78,7 +68,6 @@ public class Employee {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", age=" + age +
-                ", number=" + number +
                 ", shopId=" + shopId +
                 ", active=" + active +
                 '}';

@@ -4,10 +4,12 @@ import com.company.db.DbHelper;
 import com.company.db.impl.DbHelperImpl;
 import com.company.models.Check;
 import com.company.models.Employee;
+import com.company.models.Product;
 import com.company.services.CheckService;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,19 +18,22 @@ public class CheckServiceImpl implements CheckService {
 
     DbHelper dbHelper=new DbHelperImpl();
     @Override
-    public void save(Check check) {
+    public String save(Check check) {
 
         try {
-            PreparedStatement ps = dbHelper.getConnection("insert into tb_checks " +
-                    "(employee_id, num_of_check, totalSum, add_date, fd)" +
-                    "Values(?,?,?,?,?");
-            ps.setInt(1, check.getEmployee().getId());
-            ps.setLong(2, check.getNum());
-            ps.setDouble(3, check.getTotalSum());
-            ps.setString(4, String.valueOf(new Date()));
+            PreparedStatement ps = dbHelper.getConnection("insert into tb_check (employee_id, add_date, num_of_check,total , fd) Values(?,?,?,?,?)");
+            ps.setLong(1, check.getEmployee().getId());
+            ps.setString(2, String.valueOf(new Date()));
+            ps.setLong(3, check.getNum());
+            ps.setDouble(4, check.getTotalSum());
+            System.out.println(check.getTotalSum());
             ps.setLong(5, check.getFd());
+
+            ps.executeUpdate();
+            return String.valueOf(new Date());
+
         }catch (Exception e){
-            throw new RuntimeException("Ошибка при сохранения чека");
+            throw new RuntimeException(e);
         }
     }
 
@@ -50,7 +55,7 @@ public class CheckServiceImpl implements CheckService {
                 employee.setId(resultSet.getInt("employee_id"));
                 check.setEmployee(employee);
                 check.setFd(resultSet.getInt("fd"));
-                check.setTotalSum(resultSet.getDouble("totalSum"));
+                check.setTotalSum(resultSet.getDouble("total"));
                 check.setNum(resultSet.getLong("num_of_check"));
                 checks.add(check);
             }
@@ -62,31 +67,31 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public Check findById(Long id) {
+    public Check findById(String check_add_date) {
         try {
-            PreparedStatement preparedStatement=dbHelper.getConnection("select c.*, e.id as employee_id, e.name  " +
-                    "from tb_checks c " +
-                    "inner join tb_employees e on " +
-                    "e.id=c.employee_id" +
-                    " where c.id=?");
-            preparedStatement.setLong(1,id);
-            ResultSet resultSet=preparedStatement.executeQuery();
+            PreparedStatement ps=dbHelper.getConnection("Select * from tb_check Where add_date = ?" );
+            ps.setString(1,check_add_date);
+            ResultSet rs=ps.executeQuery();
             Check check=new Check();
-
-            while(resultSet.next()){
-
-                Employee employee=new Employee();
-                employee.setName(resultSet.getString("name"));
-                employee.setId(resultSet.getInt("employee_id"));
-                check.setEmployee(employee);
-                check.setFd(resultSet.getInt("fd"));
-                check.setTotalSum(resultSet.getDouble("totalSum"));
+            while(rs.next()){
+                check.setId(rs.getLong("id"));
 
             }
             return check;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-        }catch (Exception e){
-            throw  new RuntimeException("Ошибка при сохранении чека");
+    @Override
+    public void updateSeller(long id, double total) {
+        try {
+            PreparedStatement ps = dbHelper.getConnection("Update tb_check set total=? where id=?");
+            ps.setDouble(1,total);
+            ps.setLong(2,id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -10,5 +10,7 @@ public interface EmployeeService {
     void updateSeller (int id);
     void deleteSeller (int id);
 
+    Employee findById (int id);
+
 
 }

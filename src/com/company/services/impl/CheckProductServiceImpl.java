@@ -6,6 +6,7 @@ import com.company.models.CheckProduct;
 import com.company.services.CheckProductService;
 
 import java.sql.PreparedStatement;
+import java.util.Date;
 import java.util.List;
 
 public class CheckProductServiceImpl implements CheckProductService {
@@ -14,15 +15,16 @@ public class CheckProductServiceImpl implements CheckProductService {
     @Override
     public void save(CheckProduct check) {
         try {
-            PreparedStatement preparedStatement=dbHelper.getConnection("insert into tb_checks_products (product_id, check_id, count,cost) " +
-                    "values (?,?,?,?);");
-            preparedStatement.setLong(1,check.getProduct().getId());
-            preparedStatement.setLong(2,check.getCheck().getId());
-            preparedStatement.setDouble(3,check.getCount());
-            preparedStatement.setDouble(4, check.getCost());
+            PreparedStatement ps = dbHelper.getConnection("insert into tb_checks_products (product_id, check_id, count,cost) values (?,?,?,?)");
+            ps.setLong(1,check.getProduct().getId());
+            ps.setLong(2,check.getCheck().getId());
+            ps.setDouble(3,check.getCount());
+            ps.setDouble(4, check.getCost());
+
+            ps.executeUpdate();
 
         }catch (Exception e){
-            throw  new RuntimeException("Ошибка при сохранении чека");
+            throw new RuntimeException(e);
         }
     }
 
